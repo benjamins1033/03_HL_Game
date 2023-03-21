@@ -10,9 +10,8 @@
 
 # Number checking function goes here
 def int_check(question, low=None, high=None):
-
     situation = ""
-
+    # If low and high
     if low is not None and high is not None:
         situation = "both"
     elif low is not None and high is None:
@@ -29,8 +28,22 @@ def int_check(question, low=None, high=None):
             if situation == "both":
                 if response < low or response > high:
                     print("Please enter a number between "
-                          "{} and {}".format(low,high))
+                          "{} and {}".format(low, high))
+                    continue
 
+            # check input is not too low
+            elif situation == "low only":
+                if response < low:
+                    print("Please enter a number that is more "
+                          "than (or equal to) {}".format(low))
+                    continue
+
+            return response
+
+        # checks input is a integer
+        except ValueError:
+            print("Please enter an integer")
+            continue
 
 
 # Main routine
