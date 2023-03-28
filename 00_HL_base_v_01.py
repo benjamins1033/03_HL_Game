@@ -56,8 +56,50 @@ def check_rounds():
         return response
 
 
-# main routine goes here
+def int_check(question, low=None, high=None, exit_code=None):
+    situation = ""
+    # If low and high
+    if low is not None and high is not None:
+        situation = "both"
+    elif low is not None and high is None:
+        situation = "low only"
 
+    while True:
+
+        response = input(question)
+
+        if response == exit_code:
+            return response
+
+        try:
+            response = int(response)
+
+            # checks input is not high or
+            # too low if a both upper and lower bounds
+            # are specified
+            if situation == "both":
+                if response < low or response > high:
+                    print("Please enter a number between "
+                          "{} and {}".format(low, high))
+                    continue
+
+            # check input is not too low
+            elif situation == "low only":
+                if response < low:
+                    print("Please enter a number that is more "
+                          "than (or equal to) {}".format(low))
+                    continue
+
+            return response
+
+        # checks input is a integer
+        except ValueError:
+            print("Please enter an integer")
+            continue
+
+
+# main routine goes here
+mode = "regular"
 
 # ask the user if they want instruction and
 # display the instructions if they say 'yes'
@@ -70,6 +112,13 @@ if see_instructions == "yes":
 play_again = input("Press <Enter> to play...").lower()
 
 # Ask user for number of rounds
-rounds = check_rounds()
+rounds = int_check("How many rounds: ", 1, exit_code="")
 
+if rounds == "":
+    mode = "infinite"
+    rounds = 5
 
+# Check lower higher number
+lowest = int_check("Low Number: ")
+highest = int_check("High Number: ", lowest + 1)
+guess = int_check("Guess: ", lowest, highest, "xxx")
