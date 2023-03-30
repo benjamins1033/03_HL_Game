@@ -118,6 +118,7 @@ if rounds == "":
     mode = "infinite"
     rounds = 5
 
+
 # Check lower higher number
 lowest = int_check("Low Number: ")
 highest = int_check("High Number: ", lowest + 1)
