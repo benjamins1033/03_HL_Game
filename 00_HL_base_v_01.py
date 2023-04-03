@@ -35,27 +35,6 @@ def instructions():
     return ""
 
 
-def check_rounds():
-    while True:
-        response = input("How many rounds: ")
-
-        round_error = "Please type either <enter> " \
-                      "or an integer that is more than 0"
-        if response != "":
-            try:
-                response = int(response)
-
-                if response < 1:
-                    print(round_error)
-                    continue
-
-            except ValueError:
-                print(round_error)
-                continue
-
-        return response
-
-
 def int_check(question, low=None, high=None, exit_code=None):
     situation = ""
     # If low and high
@@ -100,6 +79,7 @@ def int_check(question, low=None, high=None, exit_code=None):
 
 # main routine goes here
 mode = "regular"
+rounds_played = 0
 
 # ask the user if they want instruction and
 # display the instructions if they say 'yes'
@@ -108,9 +88,6 @@ see_instructions = yes_no("Would you like to see the instructions? ")
 if see_instructions == "yes":
     instructions()
 
-# Press enter to start
-play_again = input("Press <Enter> to play...").lower()
-
 # Ask user for number of rounds
 rounds = int_check("How many rounds: ", 1, exit_code="")
 
@@ -118,8 +95,31 @@ if rounds == "":
     mode = "infinite"
     rounds = 5
 
-
 # Check lower higher number
 lowest = int_check("Low Number: ")
 highest = int_check("High Number: ", lowest + 1)
-guess = int_check("Guess: ", lowest, highest, "xxx")
+
+user_choice = ""
+while rounds_played < rounds and user_choice != 'xxx':
+
+    # heading
+    if mode == "infinite":
+        heading = f"Round {rounds_played + 1} (Infinite Mode)"
+        rounds += 1
+    else:
+        heading = f"Round {rounds_played + 1} of {rounds}"
+
+    print(heading)
+
+    user_choice = input("Say something: ")
+    rounds_played += 1
+
+    secret: int = random.randint(lowest, highest)
+    print("Spoiler alert", secret)
+
+    user_guess = "wrong"
+    while user_guess != secret:
+        user_guess = int_check("Guess: ", lowest, highest, "xxx")
+
+    if user_guess == secret:
+        print("Congrats you got the secret")

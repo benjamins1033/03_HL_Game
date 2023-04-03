@@ -16,6 +16,6 @@ while rounds_played < rounds and user_choice != 'xxx':
 
     user_guess = "wrong"
     while user_guess != secret:
-        user_guess = int(input("guess"))
+        user_guess = input("User guess? ")
 
 print("we are done")
