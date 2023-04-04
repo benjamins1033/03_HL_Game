@@ -1,4 +1,5 @@
 import random
+import math
 
 
 # functions go here
@@ -79,7 +80,6 @@ def int_check(question, low=None, high=None, exit_code=None):
 
 # main routine goes here
 mode = "regular"
-rounds_played = 0
 
 # ask the user if they want instruction and
 # display the instructions if they say 'yes'
@@ -99,8 +99,21 @@ if rounds == "":
 lowest = int_check("Low Number: ")
 highest = int_check("High Number: ", lowest + 1)
 
+var_range = highest - lowest + 1
+max_raw = math.log2(var_range)  # finds maximum # of guesses using
+max_upped = math.ceil(max_raw)  # rounds up (ceil --> ceiling
+max_guesses = max_upped + 1
+
+rounds_played = 0
+result = ""
+
 user_choice = ""
 while rounds_played < rounds and user_choice != 'xxx':
+
+    # initialise rounds variables
+    guesses_used = 0
+    guesses_allowed = max_guesses
+    already_guessed = []
 
     # heading
     if mode == "infinite":
@@ -110,16 +123,35 @@ while rounds_played < rounds and user_choice != 'xxx':
         heading = f"Round {rounds_played + 1} of {rounds}"
 
     print(heading)
-
-    user_choice = input("Say something: ")
     rounds_played += 1
 
-    secret: int = random.randint(lowest, highest)
+    secret = random.randint(lowest, highest)
     print("Spoiler alert", secret)
 
     user_guess = "wrong"
-    while user_guess != secret:
+    while user_guess != secret and guesses_used <= guesses_allowed:
         user_guess = int_check("Guess: ", lowest, highest, "xxx")
+        guesses_used += 1
+        already_guessed.append(user_guess)
 
-    if user_guess == secret:
-        print("Congrats you got the secret")
+        if user_guess == secret:
+            print("Congrats you got the secret")
+            result = "win"
+        else:
+            print(f"Oops - that is not right.  Guesses left: {max_guesses - guesses_used}")
+
+        if user_guess < secret:
+            print("Your guess is too low, try a higher number")
+            print()
+        if user_guess > secret:
+            print("Your guess is too high, try a lower number")
+            print()
+
+        if user_guess in already_guessed:
+            print("You already guessed that number! Please try again "
+                  "You *still* have {} guesses left".format(max_guesses - guesses_used))
+            continue
+
+    if result != "win":
+        print("Sorry you have lost")
+
