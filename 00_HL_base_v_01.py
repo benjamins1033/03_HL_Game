@@ -1,6 +1,10 @@
 import random
 import math
 
+print()
+print("*** Welcome to Higher Lower ***")
+print()
+
 
 # functions go here
 def yes_no(question):
@@ -132,6 +136,12 @@ while rounds_played < rounds and user_choice != 'xxx':
     while user_guess != secret and guesses_used <= guesses_allowed:
         user_guess = int_check("Guess: ", lowest, highest, "xxx")
         guesses_used += 1
+
+        if user_guess in already_guessed:
+            print("You already guessed that number! Please try again "
+                  "You *still* have {} guesses left".format(max_guesses - guesses_used))
+            continue
+
         already_guessed.append(user_guess)
 
         if user_guess == secret:
@@ -147,11 +157,8 @@ while rounds_played < rounds and user_choice != 'xxx':
             print("Your guess is too high, try a lower number")
             print()
 
-        if user_guess in already_guessed:
-            print("You already guessed that number! Please try again "
-                  "You *still* have {} guesses left".format(max_guesses - guesses_used))
-            continue
+        if max_guesses == guesses_used:
+            break
 
     if result != "win":
         print("Sorry you have lost")
-
